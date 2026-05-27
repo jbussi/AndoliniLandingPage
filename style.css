@@ -1,0 +1,689 @@
+/* Custom Font Import */
+@font-face {
+    font-family: 'TAN Harmoni';
+    src: url('assets/fonts/Harmoni.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Custom Variables */
+:root {
+    --paper-color: #fdfaf0;
+    --text-color: #1c1c1c;
+    --highlight-red: #b81d24; /* Rich Italian Crimson */
+    --highlight-gold: #c39a3b; /* Premium Gold Accent */
+    --olive-green: #607248; /* Sage Olive Green */
+    --olive-green-hover: #4b5a38;
+    --font-masthead: 'TAN Harmoni', 'Playfair Display', Georgia, serif;
+    --font-heading: 'Playfair Display', Georgia, serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-meta: 'Montserrat', system-ui, sans-serif;
+}
+
+/* General Resets */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #121212;
+    color: var(--text-color);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Gritty Cinemantic Background with SVG noise and pizzeria background image */
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.35'/%3E%3C/svg%3E"),
+        url('assets/pizzeria.png');
+    background-size: auto, cover;
+    background-position: center, center;
+    filter: grayscale(100%) contrast(1.15) brightness(0.22);
+    z-index: -2;
+}
+
+/* Ambient dark vignette for focus */
+.vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.85) 100%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Container */
+.page-container {
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    perspective: 1200px;
+}
+
+.newspaper-wrapper {
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    transition: transform 0.1s ease-out;
+}
+
+/* Newspaper Spread (Opened Book/Paper) */
+.newspaper-spread {
+    background-color: var(--paper-color);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.8), 
+                0 0 40px rgba(0,0,0,0.4) inset;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-height: 800px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Subtle Paper crease effect in the middle of the spread */
+.newspaper-spread::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 100%;
+    background: linear-gradient(to right, 
+        rgba(0,0,0,0.06) 0%, 
+        rgba(0,0,0,0.18) 45%, 
+        rgba(0,0,0,0.3) 50%, 
+        rgba(0,0,0,0.18) 55%, 
+        rgba(0,0,0,0.06) 100%);
+    pointer-events: none;
+    z-index: 15;
+}
+
+/* Paper Grain Texture (Overlay on the paper) */
+.newspaper-spread::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-image: 
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.16'/%3E%3C/svg%3E");
+    background-blend-mode: multiply;
+    z-index: 14;
+}
+
+/* Individual Pages */
+.newspaper-page {
+    width: 50%;
+    padding: 35px;
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Inner borders */
+.page-border-inner {
+    border: 1px solid rgba(0,0,0,0.15);
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Left Page Specifics */
+.page-left {
+    border-right: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Right Page Specifics */
+.page-right {
+    border-left: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Dividers */
+.divider-thin {
+    border-top: 1px solid var(--text-color);
+    width: 100%;
+    margin: 4px 0;
+}
+
+.divider-thick {
+    border-top: 3px solid var(--text-color);
+    width: 100%;
+    margin: 4px 0;
+}
+
+.divider-double {
+    border-top: 4px double var(--text-color);
+    width: 100%;
+    margin: 10px 0;
+}
+
+.divider-dashed {
+    border-top: 1px dashed rgba(0,0,0,0.3);
+    width: 100%;
+    margin: 20px 0;
+}
+
+/* Newspaper Header / Masthead */
+.news-header {
+    width: 100%;
+    padding: 10px 0;
+}
+
+.masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.masthead-title {
+    font-family: var(--font-masthead);
+    font-size: 2.3rem;
+    font-weight: normal;
+    letter-spacing: -0.5px;
+    text-align: center;
+    color: var(--text-color);
+    text-transform: uppercase;
+}
+
+.right-header-title {
+    font-family: var(--font-masthead);
+    font-size: 1.5rem;
+    font-weight: normal;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.header-meta {
+    font-family: var(--font-meta);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #444;
+    letter-spacing: 1px;
+}
+
+/* Subtitle & Logo Section */
+.subtitle-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 0;
+    text-align: center;
+}
+
+.pizzeria-logo-container {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--text-color);
+    padding: 3px;
+    background-color: var(--paper-color);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.pizzeria-logo-container:hover {
+    transform: rotate(5deg) scale(1.05);
+}
+
+.pizzeria-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.subtitle-text {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-style: italic;
+    font-weight: 700;
+    color: var(--highlight-red);
+}
+
+/* Headlines */
+.main-headline {
+    font-family: var(--font-heading);
+    font-size: 2.1rem;
+    font-weight: 900;
+    text-align: center;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+    margin: 15px 0;
+    color: var(--text-color);
+}
+
+/* Article Body & Columns */
+.article-body {
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    color: #2c2c2c;
+    text-align: justify;
+    column-count: 2;
+    column-gap: 20px;
+    column-fill: auto;
+    margin-top: 10px;
+}
+
+.article-body p {
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.dropcap-p {
+    position: relative;
+}
+
+.dropcap {
+    font-family: var(--font-heading);
+    font-size: 3.2rem;
+    line-height: 0.8;
+    float: left;
+    margin-top: 5px;
+    margin-right: 8px;
+    font-weight: 900;
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    padding: 4px 8px;
+    background-color: var(--text-color);
+    color: var(--paper-color);
+}
+
+/* Highlighted Quote */
+.highlight-quote {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--highlight-red);
+    border-left: 2px solid var(--highlight-red);
+    padding-left: 10px;
+    margin: 18px 0;
+    column-span: all;
+    line-height: 1.4;
+}
+
+.signature-text {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-weight: 700;
+    border-top: 1px dashed rgba(0,0,0,0.2);
+    padding-top: 10px;
+    margin-top: 15px;
+    color: #444;
+}
+
+/* Right Page Sections */
+.news-section {
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--text-color);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.section-intro {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 12px;
+}
+
+/* Reels Container & Cards */
+.reels-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.reel-card {
+    background-color: var(--paper-color);
+    border: 1px solid rgba(0,0,0,0.15);
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.reel-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+}
+
+.reel-frame {
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.1);
+    background-color: #000;
+}
+
+.instagram-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    transform: scale(1.02); /* Hide minor border glitches */
+}
+
+.reel-caption {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    color: #444;
+    margin-top: 8px;
+    line-height: 1.3;
+    text-align: center;
+    font-style: italic;
+}
+
+/* Photo Gallery Grid */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.gallery-item {
+    cursor: pointer;
+    border: 1px solid rgba(0,0,0,0.15);
+    padding: 6px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.gallery-item:hover {
+    transform: scale(1.03) rotate(1deg);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    z-index: 10;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.1); /* Black and white print style */
+    transition: filter 0.5s ease;
+    border: 1px solid rgba(0,0,0,0.08);
+}
+
+.gallery-item:hover img {
+    filter: grayscale(0%) contrast(1.0); /* Turns into premium color on hover */
+}
+
+.gallery-caption-short {
+    font-family: var(--font-meta);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 6px;
+    color: var(--text-color);
+    letter-spacing: 0.5px;
+}
+
+/* CTA Section & Stamp Button */
+.cta-section {
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+}
+
+.cta-title {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--highlight-red);
+    margin-bottom: 6px;
+}
+
+.cta-desc {
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    line-height: 1.4;
+    color: #333;
+    max-width: 90%;
+    margin: 0 auto 18px auto;
+}
+
+.cta-button-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.whatsapp-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, var(--olive-green), var(--olive-green-hover));
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 12px 28px;
+    border-radius: 4px;
+    border: 2px solid var(--text-color);
+    box-shadow: 4px 4px 0px var(--text-color),
+                0 10px 20px rgba(0,0,0,0.3);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.whatsapp-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--text-color),
+                0 14px 25px rgba(0,0,0,0.35);
+    background: linear-gradient(135deg, #748a56, var(--olive-green));
+}
+
+.whatsapp-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px var(--text-color);
+}
+
+.cta-sub-disclaimer {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    color: #666;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Lightbox Modal Styles */
+.lightbox-modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(18, 18, 18, 0.95);
+    backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.lightbox-content-container {
+    position: relative;
+    max-width: 700px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lightbox-img {
+    width: 100%;
+    max-height: 75vh;
+    object-fit: contain;
+    border: 4px solid var(--paper-color);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    background-color: var(--paper-color);
+}
+
+.lightbox-caption {
+    font-family: var(--font-heading);
+    color: var(--paper-color);
+    font-size: 1.1rem;
+    margin-top: 15px;
+    text-align: center;
+    max-width: 90%;
+    font-style: italic;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 25px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    z-index: 1000;
+}
+
+.lightbox-close:hover {
+    color: var(--highlight-red);
+}
+
+/* RESPONSIVE MEDIA QUERIES */
+
+/* Tablet & Mobile Layout (Stacks pages vertically) */
+@media (max-width: 900px) {
+    .page-container {
+        padding: 20px 10px;
+    }
+    
+    .newspaper-spread {
+        flex-direction: column;
+        min-height: auto;
+    }
+    
+    .newspaper-spread::after {
+        display: none; /* Hide fold crease */
+    }
+    
+    .newspaper-page {
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .page-left {
+        border-right: none;
+        border-bottom: 1px dashed rgba(0,0,0,0.25);
+    }
+    
+    .page-right {
+        border-left: none;
+        padding-top: 0;
+    }
+    
+    .page-border-inner {
+        padding: 15px;
+    }
+    
+    .article-body {
+        column-count: 1; /* Single column flow for mobile readability */
+    }
+    
+    .masthead-title {
+        font-size: 1.8rem;
+    }
+}
+
+/* Extra Small Screens Adjustments */
+@media (max-width: 480px) {
+    .masthead {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .masthead-title {
+        font-size: 1.5rem;
+    }
+    
+    .main-headline {
+        font-size: 1.6rem;
+    }
+    
+    .reels-container, .gallery-grid {
+        grid-template-columns: 1fr; /* Single column cards */
+        gap: 15px;
+    }
+    
+    .reel-frame {
+        height: 320px; /* Better ratio for full vertical feed */
+    }
+    
+    .gallery-item img {
+        height: 180px;
+    }
+    
+    .pizzeria-logo-container {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .whatsapp-btn {
+        font-size: 0.95rem;
+        padding: 10px 20px;
+        width: 100%;
+    }
+}
