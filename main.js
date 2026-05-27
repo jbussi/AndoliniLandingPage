@@ -1,39 +1,35 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Subtle 3D tilt effect on desktop mousemove
-    const wrapper = document.querySelector('.newspaper-wrapper');
     
-    if (wrapper && window.innerWidth > 900) {
-        document.addEventListener('mousemove', (e) => {
-            const xAxis = (window.innerWidth / 2 - e.clientX) / 85; // subtle tilt angle
-            const yAxis = (window.innerHeight / 2 - e.clientY) / 85;
-            wrapper.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-        });
-        
-        // Reset transformation when mouse leaves the document
-        document.addEventListener('mouseleave', () => {
-            wrapper.style.transform = 'rotateY(0deg) rotateX(0deg)';
-            wrapper.style.transition = 'transform 0.5s ease';
+    // 1. Mobile Navigation Menu Toggle
+    const menuToggle = document.getElementById('menu-toggle-btn');
+    const navMenu = document.getElementById('nav-menu');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            
+            // Toggle page scroll when menu is open on mobile
+            if (navMenu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = 'auto';
+            }
         });
 
-        document.addEventListener('mouseenter', () => {
-            wrapper.style.transition = 'none';
+        // Close menu when clicking on any nav link
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
         });
     }
 
-    // 2. Entrance Animation
-    if (wrapper) {
-        wrapper.style.opacity = '0';
-        wrapper.style.transform = 'translateY(30px) scale(0.98)';
-        wrapper.style.transition = 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
-        
-        setTimeout(() => {
-            wrapper.style.opacity = '1';
-            wrapper.style.transform = 'translateY(0) scale(1)';
-        }, 100);
-    }
-
-    // 3. Photo Gallery Lightbox Modal
-    const galleryItems = document.querySelectorAll('.gallery-item');
+    // 2. Photo Gallery Lightbox Modal
+    const galleryItems = document.querySelectorAll('.gallery-luxury-item');
     const lightbox = document.getElementById('lightbox-modal');
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxCaption = document.getElementById('lightbox-caption');
@@ -75,5 +71,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeLightbox() {
         lightbox.style.display = 'none';
         document.body.style.overflow = 'auto'; // Re-enable page scrolling
+    }
+
+    // 3. Simple Navbar transparency fade on scroll
+    const header = document.getElementById('site-header');
+    if (header) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.style.backgroundColor = 'rgba(10, 10, 10, 0.95)';
+                header.style.padding = '10px 0';
+            } else {
+                header.style.backgroundColor = 'rgba(10, 10, 10, 0.8)';
+                header.style.padding = '15px 0';
+            }
+        });
     }
 });
